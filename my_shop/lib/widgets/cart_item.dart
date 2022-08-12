@@ -11,12 +11,12 @@ class CartItem extends StatelessWidget {
   final String title;
 
   const CartItem(
-      this.id,
-      this.productId,
-      this.price,
-      this.quantity,
-      this.title,
-      );
+    this.id,
+    this.productId,
+    this.price,
+    this.quantity,
+    this.title,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -25,13 +25,36 @@ class CartItem extends StatelessWidget {
         Provider.of<Cart>(context, listen: false).removeItem(productId);
       },
       direction: DismissDirection.endToStart,
+      confirmDismiss: (direction) {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: const Text('Are you sure?'),
+            content: const Text(
+              'Do you want to remove the item from the cart?',
+            ),
+            actions: [
+              FlatButton(onPressed: () {
+                Navigator.of(ctx).pop(false);
+              }, child: const Text('NO')),
+              FlatButton(onPressed: () {
+                Navigator.of(ctx).pop(true);
+              }, child: const Text('YES')),
+            ],
+          ),
+        );
+      },
       key: ValueKey(id),
       background: Container(
         color: Theme.of(context).errorColor,
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
-        child: const Icon(Icons.delete, color: Colors.white, size: 40,),
+        child: const Icon(
+          Icons.delete,
+          color: Colors.white,
+          size: 40,
+        ),
       ),
       child: Card(
         margin: const EdgeInsets.symmetric(horizontal: 15, vertical: 4),
@@ -39,7 +62,12 @@ class CartItem extends StatelessWidget {
           padding: const EdgeInsets.all(8),
           child: ListTile(
             leading: CircleAvatar(
-              child: Padding(padding: const EdgeInsets.all(5), child: FittedBox(child: Text('\$$price',))),
+              child: Padding(
+                  padding: const EdgeInsets.all(5),
+                  child: FittedBox(
+                      child: Text(
+                    '\$$price',
+                  ))),
             ),
             title: Text(title),
             subtitle: Text('Total: \$${price * quantity}'),
