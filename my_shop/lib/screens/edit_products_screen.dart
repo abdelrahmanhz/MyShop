@@ -108,12 +108,11 @@ class _EditProductsScreenState extends State<EditProductsScreen> {
                   ],
                 ));
       } finally {
-        ((_) {
           setState(() {
             _isLoading = false;
           });
+          print('adding in _saveForm');
           Navigator.of(context).pop();
-        });
       }
     }
   }
