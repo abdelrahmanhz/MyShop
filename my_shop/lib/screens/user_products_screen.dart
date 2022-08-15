@@ -32,7 +32,7 @@ class UserProductsScreen extends StatelessWidget {
       body: RefreshIndicator(
         onRefresh: () => _refreshProducts(context),
         child: Padding(
-          padding: EdgeInsets.all(10),
+          padding: const EdgeInsets.all(10),
           child: ListView.builder(
             itemCount: productsData.items.length,
             itemBuilder: (ctx, i) => Column(
@@ -40,7 +40,7 @@ class UserProductsScreen extends StatelessWidget {
                 UserProductItem(
                     productsData.items[i].id, productsData.items[i].title, productsData.items[i].imageUrl
                 ),
-                Divider(),
+                const Divider(),
               ],
             ),
           ),
