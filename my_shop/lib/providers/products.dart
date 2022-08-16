@@ -41,8 +41,10 @@ class Products with ChangeNotifier {
     // ),
   ];
 
-  late final String authToken;
-  late final String userId;
+   String? authToken;
+   String? userId;
+
+  Products(this.authToken, this._items, this.userId);
 
   List<Product> get items {
     return [..._items];
@@ -164,6 +166,9 @@ class Products with ChangeNotifier {
   setListAndToken(String? token, List<Product> list, String uid) {
     authToken = token!;
     _items = list;
+    print(list.length.toString()+' products lenght');
+    print(token);
     userId = uid;
+    notifyListeners();
   }
 }
