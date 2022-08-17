@@ -10,32 +10,43 @@ class ProductDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String productId =
-    ModalRoute
-        .of(context)
-        ?.settings
-        .arguments as String;
+        ModalRoute.of(context)?.settings.arguments as String;
     final loadedProduct =
-    Provider.of<Products>(context, listen: false).findById(productId);
+        Provider.of<Products>(context, listen: false).findById(productId);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(loadedProduct.title),
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-            children: [
-              Container(
-                height: 300,
-                width: double.infinity,
+      // appBar: AppBar(
+      //   title: Text(loadedProduct.title),
+      // ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            expandedHeight: 300,
+            pinned: true,
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(loadedProduct.title),
+              background: Hero(
+                tag: loadedProduct.id,
                 child: Image.network(
                   loadedProduct.imageUrl,
                   fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(height: 10,),
-              Text('\$${loadedProduct.price}',
-                style: const TextStyle(color: Colors.grey, fontSize: 20),),
-              const SizedBox(height: 10,),
+            ),
+          ),
+          SliverList(
+            delegate: SliverChildListDelegate([
+              const SizedBox(
+                height: 10,
+              ),
+              Text(
+                '\$${loadedProduct.price}',
+                style: const TextStyle(color: Colors.grey, fontSize: 20),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(
+                height: 10,
+              ),
               Container(
                 width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 10),
@@ -45,7 +56,12 @@ class ProductDetailsScreen extends StatelessWidget {
                   softWrap: true,
                 ),
               ),
+              const SizedBox(
+                height: 800,
+              )
             ]),
+          ),
+        ],
       ),
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_shop/helpers/custom_route.dart';
 import 'package:my_shop/providers/auth.dart';
 import 'package:my_shop/screens/auth_screen.dart';
 import 'package:my_shop/screens/products_overview_screen.dart';
@@ -25,13 +26,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (ctx) => Auth(),
         ),
-        ChangeNotifierProxyProvider<Auth, Products>(
-          update: (ctx, auth, previousProduct) => previousProduct!..setListAndToken(
-                auth.token ?? '',
-                previousProduct == null ? [] : previousProduct.items,
-                auth.userId ?? ''),
-          create: (ctx) => Products('', [], ''),
-        ),
+
         ChangeNotifierProvider(
           create: (ctx) => Cart(),
         ),
@@ -43,6 +38,13 @@ class MyApp extends StatelessWidget {
                 auth.userId ?? ''),
           create: (ctx) => Orders(),
         ),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          update: (ctx, auth, previousProduct) => previousProduct!..setListAndToken(
+              auth.token ?? '',
+              previousProduct == null ? [] : previousProduct.items,
+              auth.userId ?? ''),
+          create: (ctx) => Products('', [], ''),
+        ),
       ],
       child: Consumer<Auth>(
         builder: (ctx, auth, _) => MaterialApp(
@@ -51,6 +53,11 @@ class MyApp extends StatelessWidget {
             primarySwatch: Colors.blue,
             accentColor: Colors.deepOrange,
             fontFamily: 'Lato',
+            pageTransitionsTheme: PageTransitionsTheme(
+              builders: {
+                TargetPlatform.android: CustomPageTransitionBuilder(),
+              }
+            ),
           ),
           home: auth.isAuth
               ? ProductsOverviewScreen()
